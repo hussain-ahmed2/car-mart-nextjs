@@ -1,0 +1,265 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  SELLER
+  BUYER
+}
+
+enum ListingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SOLD
+  EXPIRED
+}
+
+enum FuelType {
+  PETROL
+  DIESEL
+  ELECTRIC
+  HYBRID
+  CNG
+}
+
+enum TransmissionType {
+  MANUAL
+  AUTOMATIC
+  SEMI_AUTOMATIC
+}
+
+enum BodyType {
+  SEDAN
+  SUV
+  HATCHBACK
+  COUPE
+  CONVERTIBLE
+  WAGON
+  VAN
+  TRUCK
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Make {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  logo      String?
+  popular   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  models   Model[]
+  vehicles Vehicle[]
+
+  @@map("make")
+}
+
+model Model {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String
+  makeId    String
+  make      Make     @relation(fields: [makeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  vehicles Vehicle[]
+
+  @@unique([makeId, slug])
+  @@map("model")
+}
+
+model Vehicle {
+  id           String           @id @default(cuid())
+  title        String
+  slug         String           @unique
+  description  String           @db.Text
+  price        Int
+  year         Int
+  mileage      Int
+  fuelType     FuelType
+  transmission TransmissionType
+  bodyType     BodyType
+  color        String?
+  doors        Int?
+  seats        Int?
+  engineSize   String?
+  horsepower   Int?
+  features     String[]         @default([])
+  images       String[]         @default([])
+  status       ListingStatus    @default(PENDING)
+  featured     Boolean          @default(false)
+  views        Int              @default(0)
+
+  // Relations
+  makeId   String
+  make     Make   @relation(fields: [makeId], references: [id])
+  modelId  String
+  model    Model  @relation(fields: [modelId], references: [id])
+  sellerId String
+  seller   User   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  favorites Favorite[]
+  messages  Message[]
+  reviews   Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([makeId])
+  @@index([modelId])
+  @@index([sellerId])
+  @@index([status])
+  @@map("vehicle")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, vehicleId])
+  @@index([userId])
+  @@map("favorite")
+}
+
+model Message {
+  id      String  @id @default(cuid())
+  name    String
+  email   String
+  phone   String?
+  content String  @db.Text
+  read    Boolean @default(false)
+
+  senderId  String?
+  sender    User?   @relation(fields: [senderId], references: [id], onDelete: SetNull)
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([senderId])
+  @@index([vehicleId])
+  @@map("message")
+}
+
+model Review {
+  id      String  @id @default(cuid())
+  rating  Int // 1-5
+  comment String? @db.Text
+
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicleId String
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, vehicleId])
+  @@index([vehicleId])
+  @@map("review")
+}
+
+model Settings {
+  id              String   @id @default("site_settings")
+  siteName        String   @default("Car Marketplace")
+  siteDescription String?
+  contactEmail    String?
+  contactPhone    String?
+  heroImage       String?
+  videoBannerUrl  String?
+  facebookUrl     String?
+  twitterUrl      String?
+  instagramUrl    String?
+  linkedinUrl     String?
+  autoApprove     Boolean  @default(false)
+  featuredPrice   Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  role          UserRole  @default(BUYER)
+  phone         String?   @default("")
+  address       String?   @default("")
+  bio           String?   @default("")
+  sessions      Session[]
+  accounts      Account[]
+
+  vehicles  Vehicle[]
+  favorites Favorite[]
+  messages  Message[]
+  reviews   Review[]
+
+  @@unique([email])
+  @@map("user")
+}
