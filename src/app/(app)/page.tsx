@@ -16,8 +16,10 @@ export default async function HomePage() {
 	const make_models = await prisma.make.findMany({ include: { models: true } });
 
 	return (
-		<div className="flex flex-col">
-			<HeroSection make_models={make_models} />
+		<div className="flex flex-col -mt-16">
+			<Suspense fallback={<div>Loading...</div>}>
+				<HeroSection make_models={make_models} />
+			</Suspense>
 
 			<TopBrandsSection />
 

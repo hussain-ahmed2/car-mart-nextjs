@@ -11,7 +11,7 @@ export function Avatar({ src, alt, className = "" }: AvatarProps) {
 	return (
 		<ShadcnAvatar className={cn(className)}>
 			<AvatarImage src={src} alt={alt} />
-			<AvatarFallback>{alt ? getAvatarText(alt) : "?"}</AvatarFallback>
+			<AvatarFallback className="text-foreground">{alt ? getAvatarText(alt) : "?"}</AvatarFallback>
 		</ShadcnAvatar>
 	);
 }

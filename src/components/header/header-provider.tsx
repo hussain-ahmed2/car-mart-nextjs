@@ -54,7 +54,7 @@ export function HeaderProvider({ children }: { children: React.ReactNode }) {
 			<header
 				ref={navbarRef}
 				className={cn(
-					"fixed top-0 left-0 right-0 w-full z-50 transition-transform duration-300 text-background dark:text-foreground",
+					"fixed top-0 left-0 right-0 w-full z-50 transition-transform duration-300 text-background dark:text-foreground px-4",
 					{
 						"bg-background/60 backdrop-blur shadow text-foreground dark:text-foreground": !isTransparent,
 						"-translate-y-full": !showBar,

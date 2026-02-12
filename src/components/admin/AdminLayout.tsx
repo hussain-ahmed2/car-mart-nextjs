@@ -1,6 +1,5 @@
 "use client";
 
-import { Link, useLocation } from "@tanstack/react-router";
 import {
 	Bell,
 	Car,
@@ -28,6 +27,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 interface SidebarLink {
 	label: string;
@@ -57,23 +58,15 @@ interface AdminLayoutProps {
 	unreadMessages?: number;
 }
 
-export function AdminLayout({
-	children,
-	user,
-	pendingCount = 0,
-	unreadMessages = 0,
-}: AdminLayoutProps) {
+export function AdminLayout({ children, user, pendingCount = 0, unreadMessages = 0 }: AdminLayoutProps) {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
-	const location = useLocation();
+	const pathname = usePathname();
 
 	const isActiveLink = (href: string) => {
 		if (href === "/dashboard") {
-			return (
-				location.pathname === "/dashboard" ||
-				location.pathname === "/dashboard/"
-			);
+			return pathname === "/dashboard" || pathname === "/dashboard/";
 		}
-		return location.pathname.startsWith(href);
+		return pathname.startsWith(href);
 	};
 
 	const getBadge = (label: string) => {
@@ -103,7 +96,7 @@ export function AdminLayout({
 			>
 				{/* Logo */}
 				<div className="flex h-16 items-center justify-between border-b border-gray-800 px-6">
-					<Link to="/" className="flex items-center gap-2">
+					<Link href="/" className="flex items-center gap-2">
 						<Car className="h-8 w-8 text-blue-500" />
 						<span className="text-xl font-bold text-white">CarMarket</span>
 					</Link>
@@ -127,7 +120,7 @@ export function AdminLayout({
 							return (
 								<Link
 									key={link.href}
-									to={link.href}
+									href={link.href}
 									className={cn(
 										"flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
 										isActive
@@ -159,12 +152,8 @@ export function AdminLayout({
 							</AvatarFallback>
 						</Avatar>
 						<div className="flex-1 min-w-0">
-							<p className="text-sm font-medium text-white truncate">
-								{user?.name || "Admin"}
-							</p>
-							<p className="text-xs text-gray-400 truncate">
-								{user?.email || "admin@example.com"}
-							</p>
+							<p className="text-sm font-medium text-white truncate">{user?.name || "Admin"}</p>
+							<p className="text-xs text-gray-400 truncate">{user?.email || "admin@example.com"}</p>
 						</div>
 					</div>
 				</div>
@@ -184,9 +173,7 @@ export function AdminLayout({
 
 					{/* Breadcrumb placeholder */}
 					<div className="hidden lg:block">
-						<h1 className="text-lg font-semibold text-gray-900">
-							Admin Dashboard
-						</h1>
+						<h1 className="text-lg font-semibold text-gray-900">Admin Dashboard</h1>
 					</div>
 
 					{/* Right side actions */}
@@ -211,9 +198,7 @@ export function AdminLayout({
 											{user?.name?.charAt(0)?.toUpperCase() || "A"}
 										</AvatarFallback>
 									</Avatar>
-									<span className="hidden md:inline-block">
-										{user?.name || "Admin"}
-									</span>
+									<span className="hidden md:inline-block">{user?.name || "Admin"}</span>
 									<ChevronDown className="h-4 w-4" />
 								</Button>
 							</DropdownMenuTrigger>
@@ -221,14 +206,14 @@ export function AdminLayout({
 								<DropdownMenuLabel>My Account</DropdownMenuLabel>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem asChild>
-									<Link to="/profile">Profile</Link>
+									<Link href="/profile">Profile</Link>
 								</DropdownMenuItem>
 								<DropdownMenuItem asChild>
-									<Link to="/dashboard/settings">Settings</Link>
+									<Link href="/dashboard/settings">Settings</Link>
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem asChild>
-									<Link to="/">View Site</Link>
+									<Link href="/">View Site</Link>
 								</DropdownMenuItem>
 								<DropdownMenuSeparator />
 								<DropdownMenuItem className="text-red-600">
@@ -241,9 +226,7 @@ export function AdminLayout({
 				</header>
 
 				{/* Main content area */}
-				<main className="flex-1 overflow-auto bg-gray-50 p-4 lg:p-6">
-					{children}
-				</main>
+				<main className="flex-1 overflow-auto bg-gray-50 p-4 lg:p-6">{children}</main>
 			</div>
 		</div>
 	);

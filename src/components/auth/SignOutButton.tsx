@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "@/lib/session";
+import { signOut } from "@/lib/actions/auth.action";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -22,7 +22,7 @@ export default function SignOutButton() {
 	}
 
 	return (
-		<Button onClick={signOutHandler} disabled={isPending} variant="destructive" size="sm" className="w-full">
+		<Button onClick={signOutHandler} disabled={isPending} variant="destructive" size="sm" className="w-full flex!">
 			{isPending ? (
 				<>
 					<Spinner />

@@ -2,14 +2,14 @@ import { User } from "lucide-react";
 import { Avatar } from "../custom-ui/Avatar";
 import { getAvatarText } from "@/lib/utils";
 import Link from "next/link";
-import { getAuth } from "@/lib/session";
+import { getSession } from "@/lib/actions/auth.action";
 
 export default async function MobileAuth() {
-	const auth = await getAuth();
+	const session = await getSession();
 
 	return (
 		<>
-			{!!!auth ? (
+			{!session.success ? (
 				<Link href={"/sign-in"} className="flex flex-col gap-1 justify-center items-center flex-1 p-2">
 					<span>
 						<User />
@@ -18,8 +18,8 @@ export default async function MobileAuth() {
 				</Link>
 			) : (
 				<Link href={"/profile"} className="flex flex-col gap-1 justify-center items-center flex-1 p-2">
-					<Avatar className="size-6" src={auth.user.image || ""} alt={auth.user.name} />
-					<span>{getAvatarText(auth.user.name)}</span>
+					<Avatar className="size-6" src={session.data.user.image || ""} alt={session.data.user.name} />
+					<span>{getAvatarText(session.data.user.name)}</span>
 				</Link>
 			)}
 		</>

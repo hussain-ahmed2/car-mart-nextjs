@@ -1,21 +1,21 @@
-import { useServerFn } from "@tanstack/react-start";
-import { Button } from "../ui/button";
-import { signInWithGithubFn } from "@/server/auth.fn";
-import { Github } from "lucide-react";
-import { useRouter } from "@tanstack/react-router";
+"use client";
 
-export default function LoginWithGithubButton() {
-	const signInWithGithub = useServerFn(signInWithGithubFn);
+import { tryCatch } from "@/lib/async";
+import { Button } from "../ui/button";
+import { Github } from "lucide-react";
+import { signInWithSocial } from "@/lib/actions/auth.action";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+export default function SignInWithGithubButton() {
 	const router = useRouter();
 
 	const handleClick = async () => {
-		try {
-			const result = await signInWithGithub();
-			console.log("GitHub sign-in successful:", result);
-			router.navigate({ href: result.url });
-		} catch (error) {
-			console.error("GitHub sign-in failed:", error);
-		}
+		const [error, result] = await tryCatch(() => signInWithSocial("github"));
+		if (error) toast.error(error.message);
+		else if (result.success) {
+			if (result.data.url) router.push(result.data.url);
+		} else toast.error(result.message);
 	};
 
 	return (

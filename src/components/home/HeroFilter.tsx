@@ -8,7 +8,6 @@ import TypeField from "./TypeField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LandingFilterInput, landingFilterSchema } from "@/lib/validations/filter.validation";
 import { MakeModel } from "@/types/type";
-import { useTheme } from "next-themes";
 
 export default function HeroFilter({ make_models }: { make_models: MakeModel[] }) {
 	"use no memo";
@@ -17,7 +16,6 @@ export default function HeroFilter({ make_models }: { make_models: MakeModel[] }
 		resolver: zodResolver(landingFilterSchema),
 		mode: "all",
 	});
-	const mode = useTheme();
 
 	const onSubmit = (data: LandingFilterInput) => {
 		console.log(data);
@@ -66,9 +64,8 @@ export default function HeroFilter({ make_models }: { make_models: MakeModel[] }
 					/>
 
 					<Button
-						variant={mode.theme === "light" ? "default" : "secondary"}
 						size={"lg"}
-						className="md:rounded-full md:h-full sm:col-span-2 md:col-span-1"
+						className="md:rounded-full md:h-full sm:col-span-2 md:col-span-1 dark:bg-secondary dark:text-secondary-foreground dark:hover:bg-secondary/90"
 					>
 						<Search /> <span>Search Cars</span>
 					</Button>

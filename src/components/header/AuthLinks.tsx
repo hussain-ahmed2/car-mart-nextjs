@@ -2,20 +2,20 @@ import { Button } from "../ui/button";
 import { User } from "lucide-react";
 import AuthDropDown from "./AuthDropDown";
 import Link from "next/link";
-import { getAuth } from "@/lib/session";
+import { getSession } from "@/lib/actions/auth.action";
 
 export default async function AuthLinks() {
-	const auth = await getAuth();
+	const session = await getSession();
 	return (
 		<div className="flex items-center gap-2">
-			{!!!auth ? (
+			{!session.success ? (
 				<Button size="icon" variant="secondary" className="rounded-full drop-shadow" asChild>
 					<Link href="/sign-in">
 						<User />
 					</Link>
 				</Button>
 			) : (
-				<AuthDropDown auth={auth} />
+				<AuthDropDown session={session.data} />
 			)}
 		</div>
 	);

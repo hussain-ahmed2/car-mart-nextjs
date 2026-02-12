@@ -241,24 +241,23 @@ model Settings {
 }
 
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean    @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          UserRole  @default(BUYER)
-  phone         String?   @default("")
-  address       String?   @default("")
-  bio           String?   @default("")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  role          UserRole   @default(BUYER)
+  phone         String?    @default("")
+  address       String?    @default("")
+  bio           String?    @default("")
   sessions      Session[]
   accounts      Account[]
-
-  vehicles  Vehicle[]
-  favorites Favorite[]
-  messages  Message[]
-  reviews   Review[]
+  vehicles      Vehicle[]
+  favorites     Favorite[]
+  messages      Message[]
+  reviews       Review[]
 
   @@unique([email])
   @@map("user")

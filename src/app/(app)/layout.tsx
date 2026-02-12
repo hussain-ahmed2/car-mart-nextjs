@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
-import "@/app/globals.css";
+import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
@@ -24,7 +24,7 @@ export default function RootLayout({
 			<body className={`${dmSans.className} antialiased`}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					<Header />
-					{children}
+					<main className="flex flex-col min-h-screen pt-16 w-full">{children}</main>
 					<Footer />
 					<MobileFooter />
 					<Toaster position="top-center" richColors closeButton />
