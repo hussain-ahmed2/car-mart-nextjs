@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import AllButton from "../custom-ui/AllButton";
-import VehicleCarousel from "../vehicle/VehicleCarousel";
+import VehicleCarousel, { VehicleCarouselSkeleton } from "../vehicle/VehicleCarousel";
+import { Skeleton } from "../ui/skeleton";
 
 export default async function VehicleSection() {
 	const vehicles = await prisma.vehicle.findMany({ take: 10 });
@@ -14,6 +15,21 @@ export default async function VehicleSection() {
 				</div>
 
 				<VehicleCarousel vehicles={vehicles} />
+			</div>
+		</section>
+	);
+}
+
+export function VehicleSectionSkeleton() {
+	return (
+		<section className="py-12 sm:py-20 relative px-4">
+			<div className="w-full max-w-7xl mx-auto">
+				<div className="mb-8 flex items-center justify-between gap-4">
+					<Skeleton className="h-9 w-40" />
+					<Skeleton className="h-9 w-16" />
+				</div>
+
+				<VehicleCarouselSkeleton />
 			</div>
 		</section>
 	);

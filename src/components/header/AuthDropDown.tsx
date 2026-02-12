@@ -16,7 +16,7 @@ export default function AuthDropDown({ session }: { session: typeof auth.$Infer.
 	return (
 		<div className="flex items-center justify-center">
 			<DropdownMenu>
-				<DropdownMenuTrigger className="h-auto w-auto p-0 rounded-full focus:outline-none">
+				<DropdownMenuTrigger className="h-auto w-auto p-0 rounded-full">
 					<Avatar
 						className="size-9 ring-1 ring-border hover:ring-primary transition"
 						src={session.user.image || ""}
@@ -28,7 +28,7 @@ export default function AuthDropDown({ session }: { session: typeof auth.$Infer.
 					{/* User Info */}
 					<DropdownMenuLabel>
 						<div className="flex items-center gap-3">
-							<Avatar className="size-8" src={session.user.image || ""} />
+							<Avatar className="size-9" src={session.user.image || ""} alt={session.user.name} />
 							<div>
 								<p className="text-sm font-medium">{session.user.name}</p>
 								<p className="text-xs text-muted-foreground line-clamp-1">{session.user.email}</p>

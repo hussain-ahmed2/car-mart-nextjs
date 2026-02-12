@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import VehicleCard from "../vehicle/VehicleCard";
+import VehicleCard, { VehicleCardSkeleton } from "../vehicle/VehicleCard";
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from "../ui/carousel";
 import AutoPlay from "embla-carousel-autoplay";
 import { useRef } from "react";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Vehicle } from "@/generated/prisma/client";
+import { Skeleton } from "../ui/skeleton";
 
 export default function VehicleCarousel({ vehicles }: { vehicles: Vehicle[] }) {
 	const carouselRef = useRef<CarouselApi>(null);
@@ -48,5 +49,21 @@ export default function VehicleCarousel({ vehicles }: { vehicles: Vehicle[] }) {
 				</Button>
 			</div>
 		</Carousel>
+	);
+}
+
+export function VehicleCarouselSkeleton() {
+	return (
+		<div>
+			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+				{Array.from({ length: 4 }).map((_, index) => (
+					<VehicleCardSkeleton key={index} />
+				))}
+			</div>
+			<div className="mt-4 flex gap-4 justify-center">
+				<Skeleton className="h-10 w-10" />
+				<Skeleton className="h-10 w-10" />
+			</div>
+		</div>
 	);
 }

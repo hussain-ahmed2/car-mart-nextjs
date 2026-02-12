@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { formatCurrency, formatMiles } from "@/lib/utils";
 import { Vehicle } from "@/generated/prisma/client";
 import Image from "next/image";
+import { Skeleton } from "../ui/skeleton";
 
 export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
 	return (
@@ -54,6 +55,48 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
 					<span>View Details</span>
 					<ArrowUpRight />
 				</Button>
+			</CardFooter>
+		</Card>
+	);
+}
+
+export function VehicleCardSkeleton() {
+	return (
+		<Card className="py-0 overflow-hidden gap-0 hover:border-primary transition pointer-events-none">
+			<div className="relative aspect-4/3">
+				<Skeleton className="w-full aspect-4/3 object-cover" />
+				<Skeleton className="absolute size-8 right-4 top-4 rounded-full bg-background hover:bg-background/90 drop-shadow-sm shadow-none" />
+			</div>
+
+			<CardHeader className="my-4">
+				<CardTitle className="line-clamp-1 text-base">
+					<Skeleton className="w-1/2 h-6" />
+				</CardTitle>
+				<CardDescription className="line-clamp-1">
+					<Skeleton className="w-full h-5" />
+				</CardDescription>
+			</CardHeader>
+
+			<CardContent className="my-4">
+				<div className="grid grid-cols-3 text-center text-xs">
+					<div className="flex flex-col items-center gap-2">
+						<Skeleton className="size-5 rounded-full" />
+						<Skeleton className="w-1/2 h-6" />
+					</div>
+					<div className="flex flex-col items-center gap-2">
+						<Skeleton className="size-5 rounded-full" />
+						<Skeleton className="w-1/2 h-6" />
+					</div>
+					<div className="flex flex-col items-center gap-2">
+						<Skeleton className="size-5 rounded-full" />
+						<Skeleton className="w-1/2 h-6" />
+					</div>
+				</div>
+			</CardContent>
+
+			<CardFooter className="flex items-center justify-between border-t py-2!">
+				<Skeleton className="w-24 h-8" />
+				<Skeleton className="size-8 w-1/2" />
 			</CardFooter>
 		</Card>
 	);

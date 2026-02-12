@@ -1,10 +1,10 @@
 import BlogSection from "@/components/home/BlogSection";
 import BuySellCTASection from "@/components/home/BuySellCTASection";
 import HeroSection from "@/components/home/HeroSection";
-import PopularMakesSection from "@/components/home/PopularMakesSection";
+import PopularMakesSection, { PopularMakesSectionSkeleton } from "@/components/home/PopularMakesSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import TopBrandsSection from "@/components/home/TopBrandsSection";
-import VehicleSection from "@/components/home/VehicleSection";
+import VehicleSection, { VehicleSectionSkeleton } from "@/components/home/VehicleSection";
 import VideoBannerSection from "@/components/home/VideoBannerSection";
 import WaySection from "@/components/home/WaySection";
 import WhyChoseUsSection from "@/components/home/WhyChoseUsSection";
@@ -23,7 +23,7 @@ export default async function HomePage() {
 
 			<TopBrandsSection />
 
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<VehicleSectionSkeleton />}>
 				<VehicleSection />
 			</Suspense>
 
@@ -33,7 +33,7 @@ export default async function HomePage() {
 
 			<WhyChoseUsSection />
 
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<PopularMakesSectionSkeleton />}>
 				<PopularMakesSection />
 			</Suspense>
 

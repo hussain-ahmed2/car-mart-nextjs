@@ -28,3 +28,7 @@ export function formatMiles(miles: number) {
 		unitDisplay: "narrow",
 	}).format(miles);
 }
+
+export async function wait(ms: number = 1000) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
